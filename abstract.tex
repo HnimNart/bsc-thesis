@@ -1,0 +1,12 @@
+\begin{abstract}
+\emph{Neural networks are a powerful class of machine learning models, 
+	which are able to solve complex problems, such as image classification. 
+	The increased power comes with a cost though as they are computationally very expensive models and thus are trained on GPGPUs. 
+	This thesis explored implementation options of a deep learning library, which can support feed-forward types of neural networks, in the data-parallel language Futhark. 
+	Furthermore, the thesis investigates if the language is expressive enough to handle the complex nature of a deep learning library. 
+	The final design of the library in this thesis uses a representation of a neural network as a composition of functions, which avoids the limitation of non-regular arrays and shows that the module and type system is expressive enough to provide the necessary abstraction. 
+	The library is then benchmarked against the popular machine-learning library, Tensorflow, which showed that the performance of the library is faster for larger batch sizes on a multilayer perceptron, but falls short on smaller batch sizes. 
+	The library is up to 2.7 times slower on a convolutional network for large batch sizes, but only 2.0 times slower for small batch sizes. 
+	The performance gap for the latter result can be lessened significantly by implementing better convolutional algorithms, along with the Futhark compiler continously being optimized in the future.}\newline \newline 
+\textbf{Keywords:} Deep learning, Neural networks, General-Purpose Graphics Processing Units, Futhark. 
+\end{abstract}

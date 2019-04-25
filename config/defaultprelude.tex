@@ -1,0 +1,171 @@
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[british]{isodate}
+
+% Layout Fixes
+\usepackage{booktabs} % nicer spacing between table rulers
+\usepackage{microtype}
+\usepackage{fixltx2e} % To prevent the figures from being placed
+                      % out-of-order with respect to their
+                      % "non-starred" counterparts
+
+\usepackage{amsmath,amssymb, amsbsy}
+\usepackage[amsmath,amsthm,thmmarks]{ntheorem}
+\usepackage[final]{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage{color}
+\usepackage{fancyvrb}
+\usepackage{semantic}
+\usepackage{etoolbox}
+\usepackage{environ}
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+\usepackage{multirow}
+\usepackage{adjustbox}
+\usepackage{placeins}
+\usepackage{hyperref}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds,petri,decorations.markings}
+
+\usepackage[final]{listings}
+% Fix dashes in listings (from
+% https://tex.stackexchange.com/questions/33185/listings-package-changes-hyphens-to-minus-signs
+% )
+\makeatletter
+\lst@CCPutMacro\lst@ProcessOther {"2D}{\lst@ttfamily{-{}}{-{}}}
+\@empty\z@\@empty
+\makeatother
+
+% Avoid breaking lstlistings environments across pages.
+\BeforeBeginEnvironment{lstlisting}{\vspace{\topskip}\par\noindent\begin{minipage}{\linewidth}}
+\AfterEndEnvironment{lstlisting}{\end{minipage}\par}
+\newenvironment{wrap}{\vspace{\topskip}\par\noindent\begin{minipage}{\linewidth}}{\end{minipage}\par}
+
+\renewcommand{\ttdefault}{pcr} % Courier instead of Computer Modern
+
+\usepackage{enumitem} % Allows \begin{description}[style=nextline]
+
+\usepackage{fixme}
+\fxsetup{
+    author=,
+    layout=margin,
+    theme=color
+}
+
+\makeatletter
+\newcommand*\idstyle{%
+        \expandafter\id@style\the\lst@token\relax
+}
+\def\id@style#1#2\relax{%
+        \ifcat#1\relax\else
+                \ifnum`#1=\uccode`#1%
+                        \color{blue}
+                \fi
+        \fi
+}
+\makeatother
+
+% Bibliography
+\usepackage[
+hyperref=auto,
+backend=biber,
+style=alphabetic,
+citestyle=alphabetic,
+defernumbers=true,
+maxnames=99
+]{biblatex}
+
+% Fonts
+\usepackage{palatino}
+\linespread{1.05}
+\usepackage{inconsolata}
+
+% customize chapter pages
+\makepagestyle{myheadings}
+\makepagestyle{myheadingschapterpage}
+\makeevenfoot{myheadingschapterpage}{}{\thepage}{}
+\makeoddfoot{myheadingschapterpage}{}{\thepage}{}
+\aliaspagestyle{chapter}{myheadingschapterpage}
+\aliaspagestyle{title}{myheadingschapterpage}
+\makeevenhead{myheadings}{\hskip.5cm\leftmark}{}{}
+\makeoddhead{myheadings}{}{}{\rightmark\hskip.5cm}
+\makeevenfoot{myheadings}{}{\thepage}{}
+\makeoddfoot{myheadings}{}{\thepage}{}
+\pagestyle{myheadings}
+
+\def\thefigure{\arabic{figure}}
+\setcounter{tocdepth}{0}
+
+
+\setsecnumdepth{subsection}
+\setcounter{chapter}{0}
+\setsecheadstyle{\large\bfseries\raggedright}
+\setsubsecheadstyle{\bfseries}
+
+% BIBLIOGRAPHY styling
+% Print the DOI url out
+
+\DeclareFieldFormat{doi}{\textsc{doi}: \url{http://dx.doi.org/#1}}
+\DeclareNameAlias{default}{last-first/first-last}
+%\DeclareFieldFormat{title}{\emph{#1}}
+\renewcommand\mkbibnamefirst[1]{\textsc{#1}}
+\renewcommand\mkbibnamelast[1]{\textsc{#1}}
+\renewcommand*{\bibfont}{\footnotesize}
+
+% No page numbers for parts in TOC
+\cftpagenumbersoff{part}
+
+% Figures
+
+\usepackage{sidecap}
+\usepackage{caption}
+\captionsetup{margin=0pt, font=small, labelfont=bf, format=hang}
+% \setlength{\abovecaptionskip}{0pt}
+% \setlength{\belowcaptionskip}{0pt}
+\captionsetup[subfigure]{skip=1em}
+\usepackage{subcaption}
+
+% Default commands
+\newcommand{\subimgwidth}{.48\textwidth}
+\newcommand{\imgwidth}{.85\textwidth}
+
+
+\newtheorem{example}{Example}
+%
+\theoremstyle{plain}
+\theoremsymbol{\tiny $\Box$}
+\newtheorem{definition}[equation]{Definition}
+
+
+% Bitwise and and or operators
+% http://tex.stackexchange.com/questions/39313/double-nested-logical-and-and-logical-or-symbols
+\DeclareFontFamily{U}{matha}{\hyphenchar\font45}
+\DeclareFontShape{U}{matha}{m}{n}{
+      <5> <6> <7> <8> <9> <10> gen * matha
+      <10.95> matha10 <12> <14.4> <17.28> <20.74> <24.88> matha12
+      }{}
+
+\newcommand{\bland}{\mathbin{
+  \raisebox{.1ex}{%
+    \rotatebox[origin=c]{-90}{\usefont{U}{matha}{m}{n}\symbol{\string"CE}}}}}
+\newcommand{\blor}{\mathbin{
+  \raisebox{.1ex}{%
+    \rotatebox[origin=c]{90}{\usefont{U}{matha}{m}{n}\symbol{\string"CE}}}}}
+
+% Visually Separate figures from text using a line.
+\def\topfigrule{\vskip1ex\noindent\dotfill}
+\def\botfigrule{\noindent\dotfill\vskip1ex}
+
+% Useful macros.
+\newcommand{\tagsc}[1]{\tag{\textsc{#1}}} % Fake Small Caps tagging
+\newcommand*{\bfrac}[2]{\genfrac{}{}{0pt}{}{#1}{#2}}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "thesis.tex"
+%%% End: 

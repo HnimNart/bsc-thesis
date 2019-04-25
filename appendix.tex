@@ -1,0 +1,382 @@
+\chapter{Benchmark results}
+\label{sec:benchmarkres}
+\section{Futhark benchmarks results}
+\begin{figure}[!htbp]
+\centering
+\begin{lstlisting}[	xleftmargin=-1.0cm,]
+Results for mnist_128.fut:
+dataset ../data/mnist_100000_f32.bindata:  349954.80us (avg. of 10 runs; RSD: 0.00)
+Results for mnist_64.fut:
+dataset ../data/mnist_100000_f32.bindata:  506426.60us (avg. of 10 runs; RSD: 0.00)
+Results for mnist_32.fut:
+dataset ../data/mnist_100000_f32.bindata:  845774.50us (avg. of 10 runs; RSD: 0.00)
+Results for mnist_16.fut:
+dataset ../data/mnist_100000_f32.bindata: 1593802.60us (avg. of 10 runs; RSD: 0.00)
+\end{lstlisting}
+	\caption{Benchmark results for MLP in Futhark}
+\end{figure}
+\begin{figure}[!h]
+	\centering
+	\begin{lstlisting}[	xleftmargin=-1.0cm,]
+Results for mnist_conv_128.fut:
+dataset ../data/mnist_100000_f32.bindata: 7514796.40us (avg. of 10 runs; RSD: 0.00)
+Results for mnist_conv_64.fut:
+dataset ../data/mnist_100000_f32.bindata: 7991749.90us (avg. of 10 runs; RSD: 0.00)
+Results for mnist_conv_32.fut:
+dataset ../data/mnist_100000_f32.bindata: 9010751.10us (avg. of 10 runs; RSD: 0.00)
+Results for mnist_conv_16.fut:
+dataset ../data/mnist_100000_f32.bindata: 12091464.30us (avg. of 10 runs; RSD: 0.00)
+	\end{lstlisting}
+	\caption{Benchmark results for CNN in Futhark}
+\end{figure}
+\newpage 
+\section{Tensorflow benchmark results}
+\begin{table}[!htbp]
+	\centering
+\begin{tabular}{lllll}
+	\hline
+	\backslashbox{run \#}{Batch size}
+&\makebox[3em]{16}&\makebox[3em]{32}&\makebox[3em]{64}&\makebox[3em]{128}  \\\hline\hline
+	1 & 806060 & 604798 & 546822 & 439358 \\ \hline
+	2 & 880370 & 679317 & 476656 & 476263 \\ \hline
+	3 & 809124 & 631627 & 472093 & 531199 \\ \hline
+	4 & 810173 & 600780 & 538741 & 408783 \\ \hline
+	5 & 877590 & 692555 & 479202 & 413419 \\ \hline
+	6 & 806486 & 622508 & 478880 & 407778 \\ \hline
+	7 & 812005 & 603003 & 475040 & 430840 \\ \hline
+	8 & 824111 & 608722 & 469326 & 413238 \\ \hline
+	9 & 811256 & 603799 & 473371 & 413990 \\ \hline
+	10 & 805981 & 600677 & 475712 & 411898 \\ \hline
+\end{tabular}
+	\caption{Benchmark time in $\mu$s for each run w. MLP in Tensorflow.}
+\end{table}
+
+\begin{table}[!htbp]
+	\centering
+\begin{tabular}{lllll}
+	\hline
+	\backslashbox{run \#}{Batch size}
+&\makebox[3em]{16}&\makebox[3em]{32}&\makebox[3em]{64}&\makebox[3em]{128}  \\\hline\hline
+	1 & 6116550 & 4465761 & 3431302 & 2772002 \\ \hline
+	2 & 5947696 & 4164861 & 3424191 & 2762104 \\ \hline
+	3 & 5774723 & 4102609 & 3279976 & 2743420 \\ \hline
+	4 & 5816716 & 4081254 & 3343420 & 2756505 \\ \hline
+	5 & 5873528 & 4276965 & 3538718 & 2711210 \\ \hline
+	6 & 5891137 & 4114870 & 3239401 & 2707600 \\ \hline
+	7 & 5826807 & 4160194 & 3295297 & 2743304 \\ \hline
+	8 & 5852604 & 4080076 & 3347933 & 2762100 \\ \hline
+	9 & 5852070 & 4129724 & 3281702 & 2762154 \\ \hline
+	10 & 5867789 & 4107558 & 3252794 & 2762101 \\ \hline
+\end{tabular}
+\caption{Benchmark time in $\mu$s for each run w. CNN in Tensorflow}
+\end{table}
+\newpage 
+\chapter{Accuracy results}
+\label{res_acc}
+\begin{table}[!htbp]
+	\centering 
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\backslashbox{run \#}{Library}
+		&\makebox[5em]{Tensorflow}&\makebox[3em]{Futhark} \\\hline\hline
+		1 & 0,9127 & 0,906 \\ \hline
+		2 & 0,9117 & 0,9009 \\ \hline
+		3 & 0,9086 & 0,9065 \\ \hline
+		4 & 0,9061 & 0,9028 \\ \hline
+		5 & 0,9102 & 0,8972 \\ \hline
+		6 & 0,9011 & 0,9033 \\ \hline
+		7 & 0,9066 & 0,9021 \\ \hline
+		8 & 0,9063 & 0,9014 \\ \hline
+		9 & 0,9069 & 0,8992 \\ \hline
+		10 & 0,9084 & 0,9001 \\ \hline \hline 
+		\textbf{Mean} & 0.9078 & 0.9021 \\ \hline 
+	\end{tabular}
+    \caption{Accuracy results for MLP}
+\end{table}
+\newpage 
+\begin{table}[!hbtp]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\backslashbox{run \#}{Library}
+		&\makebox[5em]{Tensorflow}&\makebox[3em]{Futhark} \\\hline\hline
+		1 & 0,9676 & 0,9709 \\ \hline
+		2 & 0,974 & 0,9731 \\ \hline
+		3 & 0,9708 & 0,972 \\ \hline
+		4 & 0,9707 & 0,9658 \\ \hline
+		5 & 0,9695 & 0,9701 \\ \hline
+		6 & 0,9761 & 0,9728 \\ \hline
+		7 & 0,9713 & 0,9738 \\ \hline
+		8 & 0,9762 & 0,9757 \\ \hline
+		9 & 0,9726 & 0,9757 \\ \hline
+		10 & 0,9766 & 0,977 \\ \hline\hline 
+		\textbf{Mean} & 0.9726 & 0.9727 \\ \hline 
+	\end{tabular}
+\caption{Accuracy results for convolutional network}
+\end{table}
+\chapter{Programs}
+\section{Accuracy programs}
+\label{acc}
+\subsection{MLP Futhark program}
+\begin{lstlisting}
+import "../lib/deep_learning"
+module dl = deep_learning f32
+
+let seed = 1
+
+let l1 = dl.layers.dense (784, 256) dl.nn.identity seed
+let l2 = dl.layers.dense (256, 256) dl.nn.identity seed
+let l3 = dl.layers.dense (256, 10) dl.nn.identity seed
+
+let nn1 = dl.nn.connect_layers l1 l2
+let nn  = dl.nn.connect_layers nn1 l3
+
+let main [m] (input:[m][]dl.t) (labels:[m][]dl.t) =
+	let train = 64000
+	let validation = 10000
+	let batch_size = 128
+	let alpha = 0.1
+	let nn1 = dl.train.gradient_descent nn alpha
+		input[:train] labels[:train]
+		batch_size dl.loss.softmax_cross_entropy_with_logits
+	in dl.nn.accuracy nn1 input[train:train+validation]
+		labels[train:train+validation] dl.nn.softmax dl.nn.argmax
+\end{lstlisting}
+\subsection{MLP Tensorflow program}
+\begin{minted}[linenos]{python}
+""" Neural Network.
+
+A 2-Hidden Layers Fully Connected Neural Network (a.k.a Multilayer Perceptron)
+implementation with TensorFlow. This example is using the MNIST database
+of handwritten digits (http://yann.lecun.com/exdb/mnist/).
+
+Links:
+[MNIST Dataset](http://yann.lecun.com/exdb/mnist/).
+
+Author: Aymeric Damien
+Project: https://github.com/aymericdamien/TensorFlow-Examples/
+"""
+from __future__ import print_function
+
+# Import MNIST data
+from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
+
+import tensorflow as tf
+
+# Parameters
+learning_rate = 0.1
+num_steps = 500
+batch_size = 128
+
+# Network Parameters
+n_hidden_1 = 256 # 1st layer number of neurons
+n_hidden_2 = 256 # 2nd layer number of neurons
+num_input = 784 # MNIST data input (img shape: 28*28)
+num_classes = 10 # MNIST total classes (0-9 digits)
+
+# Define the neural network
+def neural_net(x_dict):
+	# TF Estimator input is a dict, in case of multiple inputs
+	x = x_dict['images']
+	# Hidden fully connected layer with 256 neurons
+	layer_1 = tf.layers.dense(x, n_hidden_1)
+	# Hidden fully connected layer with 256 neurons
+	layer_2 = tf.layers.dense(layer_1, n_hidden_2)
+	# Output fully connected layer with a neuron for each class
+	out_layer = tf.layers.dense(layer_2, num_classes)
+	return out_layer
+
+# Define the model function (following TF Estimator Template)
+def model_fn(features, labels, mode):
+	# Build the neural network
+	logits = neural_net(features)
+
+	# Predictions
+	pred_classes = tf.argmax(logits, axis=1)
+	pred_probas = tf.nn.softmax(logits)
+
+	# If prediction mode, early return
+	if mode == tf.estimator.ModeKeys.PREDICT:
+		return tf.estimator.EstimatorSpec(mode, predictions=pred_classes)
+
+	# Define loss and optimizer
+	loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
+	logits=logits, labels=labels))
+	optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate)
+	train_op = optimizer.minimize(loss_op,
+	global_step=tf.train.get_global_step())
+
+	# Evaluate the accuracy of the model
+	acc_op = tf.metrics.accuracy(labels=tf.argmax(labels,1), predictions=pred_classes)
+
+	estim_specs = tf.estimator.EstimatorSpec(
+		mode=mode,
+		predictions=pred_classes,
+		loss=loss_op,
+		train_op=train_op,
+		eval_metric_ops={'accuracy': acc_op})
+
+	return estim_specs
+
+# Build the Estimator
+model = tf.estimator.Estimator(model_fn)
+
+# Define the input function for training
+input_fn = tf.estimator.inputs.numpy_input_fn(
+x={'images': mnist.train.images}, y=mnist.train.labels,
+	batch_size=batch_size, num_epochs=None, shuffle=False)
+	# Train the Model
+model.train(input_fn, steps=num_steps)
+
+test_input, test_labels = mnist.train.next_batch(10000)
+# Evaluate the Model
+# Define the input function for evaluating
+input_fn = tf.estimator.inputs.numpy_input_fn(
+	x={'images': test_input}, y=test_labels,
+	shuffle=False)
+# Use the Estimator 'evaluate' method
+e = model.evaluate(input_fn)
+print("Testing Accuracy:", e['accuracy'])
+\end{minted}
+\subsection{Futhark convolutional program}
+\begin{lstlisting}
+import "../lib/deep_learning"
+module dl = deep_learning f32
+let seed = 1
+
+let conv1     = dl.layers.conv2d (32, 5, 1, 1) dl.nn.relu seed
+let max_pool1 = dl.layers.max_pooling2d (2,2)
+let conv2     = dl.layers.conv2d (64, 3, 1, 32) dl.nn.relu seed
+let max_pool2 = dl.layers.max_pooling2d (2,2)
+let flat      = dl.layers.flatten
+let fc        = dl.layers.dense (1600, 1024) dl.nn.relu seed
+let output    = dl.layers.dense (1024, 10)   dl.nn.identity seed
+
+let nn0   = dl.nn.connect_layers conv1 max_pool1
+let nn1   = dl.nn.connect_layers nn0 conv2
+let nn2   = dl.nn.connect_layers nn1 max_pool2
+let nn3   = dl.nn.connect_layers nn2 flat
+let nn4   = dl.nn.connect_layers nn3 fc
+let nn    = dl.nn.connect_layers nn4 output
+
+let main [m] (input: [m][]dl.t) (labels: [m][]dl.t) =
+	let input' = map (\img -> [unflatten 28 28 img]) input
+	let train = 64000
+	let validation = 10000
+	let batch_size = 128
+	let alpha = 0.1
+	let nn' = dl.train.gradient_descent nn alpha
+		input'[:train] labels[:train]
+		batch_size dl.loss.softmax_cross_entropy_with_logits
+	in dl.nn.accuracy nn'
+		input'[train:train+validation]
+		labels[train:train+validation]
+		(dl.nn.softmax) (dl.nn.argmax)
+\end{lstlisting}
+\subsubsection{Tensorflow convolutional program}
+\begin{minted}[linenos]{python}
+""" Convolutional Neural Network.
+
+Build and train a convolutional neural network with TensorFlow.
+This example is using the MNIST database of handwritten digits
+(http://yann.lecun.com/exdb/mnist/)
+
+Author: Aymeric Damien
+Project: https://github.com/aymericdamien/TensorFlow-Examples/
+"""
+from __future__ import division, print_function, absolute_import
+
+# Import MNIST data
+from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
+
+import tensorflow as tf
+
+# Training Parameters
+learning_rate = 0.1
+num_steps = 500
+batch_size = 128
+
+# Network Parameters
+num_input = 784 # MNIST data input (img shape: 28*28)
+num_classes = 10 # MNIST total classes (0-9 digits)
+
+# Create the neural network
+def conv_net(x_dict, n_classes,  reuse, is_training):
+	# Define a scope for reusing the variables
+	with tf.variable_scope('ConvNet', reuse=reuse):
+	# TF Estimator input is a dict, in case of multiple inputs
+		x = x_dict['images']
+		# MNIST data input is a 1-D vector of 784 features (28*28 pixels)
+		# Reshape to match picture format [Height x Width x Channel]
+		# Tensor input become 4-D: [Batch Size, Height, Width, Channel]
+		x = tf.reshape(x, shape=[-1, 28, 28, 1])
+		# Convolution Layer with 32 filters and a kernel size of 5
+		conv1 = tf.layers.conv2d(x, 32, 5, activation=tf.nn.relu)
+		# Max Pooling (down-sampling) with strides of 2 and kernel size of 2
+		conv1 = tf.layers.max_pooling2d(conv1, 2, 2)
+		# Convolution Layer with 64 filters and a kernel size of 3
+		conv2 = tf.layers.conv2d(conv1, 64, 3, activation=tf.nn.relu)
+		# Max Pooling (down-sampling) with strides of 2 and kernel size of 2
+		conv2 = tf.layers.max_pooling2d(conv2, 2, 2)
+		# Flatten the data to a 1-D vector for the fully connected layer
+		fc1 = tf.contrib.layers.flatten(conv2)
+		# Fully connected layer (in tf contrib folder for now)
+		fc1 = tf.layers.dense(fc1, 1024)
+		# Output layer, class prediction
+		out = tf.layers.dense(fc1, n_classes)
+	return out
+
+# Define the model function (following TF Estimator Template)
+def model_fn(features, labels, mode):
+	logits_train = conv_net(features, num_classes, reuse=False,is_training=True)
+	# Predictions
+	pred_classes = tf.argmax(logits_train, axis=1)
+	pred_probas = tf.nn.softmax(logits_train)
+
+	# If prediction mode, early return
+	if mode == tf.estimator.ModeKeys.PREDICT:
+	return tf.estimator.EstimatorSpec(mode, predictions=pred_classes)
+
+	# Define loss and optimizer
+	loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
+	logits=logits_train, labels=labels))
+	optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate)
+	train_op = optimizer.minimize(loss_op,
+	global_step=tf.train.get_global_step())
+
+	# Evaluate the accuracy of the model
+	acc_op = tf.metrics.accuracy(labels=tf.argmax(labels,1) , predictions=pred_classes)
+
+	# TF Estimators requires to return a EstimatorSpec, that specify
+	# the different ops for training, evaluating, ...
+	estim_specs = tf.estimator.EstimatorSpec(
+		mode=mode,
+		predictions=pred_classes,
+		loss=loss_op,
+		train_op=train_op,
+		eval_metric_ops={'accuracy': acc_op})
+
+	return estim_specs
+
+# Build the Estimator
+model = tf.estimator.Estimator(model_fn)
+
+# Define the input function for training
+input_fn = tf.estimator.inputs.numpy_input_fn(
+	x={'images': mnist.train.images}, y=mnist.train.labels,
+	batch_size=batch_size, num_epochs=None, shuffle=False)
+# Train the Model
+model.train(input_fn, steps=num_steps)
+
+test_input, test_labels = mnist.train.next_batch(10000)
+# Evaluate the Model
+# Define the input function for evaluating
+input_fn = tf.estimator.inputs.numpy_input_fn(
+	x={'images': test_input}, y=test_labels,
+	shuffle=False)
+# Use the Estimator 'evaluate' method
+e = model.evaluate(input_fn)
+print("Testing Accuracy:", e['accuracy'])
+\end{minted}

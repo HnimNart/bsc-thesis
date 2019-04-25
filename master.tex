@@ -1,0 +1,38 @@
+\documentclass[11pt]{report}
+\usepackage[a4paper]{geometry}
+
+\input{config/prelude}
+
+\titel{Implementation of a deep learning library in Futhark} 
+\undertitel{} 
+\opgave{BSc Thesis in Computer Science} 
+\forfatter{Duc Minh Tran <cwz688>}
+\dato{01. August 2018}
+\vejleder{Supervisor: Troels Henriksen} 
+
+\begin{document}
+\maketitle
+\include{abstract}
+\tableofcontents
+
+\chapter{Introduction}
+\input{introduction}
+
+\chapter{Neural Network}
+\input{background}
+
+\chapter{Design and implementation}
+\input{design}
+
+\chapter{Future work and conclusion}
+\input{conclusion}
+
+\appendix
+\input{appendix}
+
+\newpage
+
+\bibliographystyle{config/DIKU} 
+\bibliography{master}
+
+\end{document}

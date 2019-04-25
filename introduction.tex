@@ -1,0 +1,212 @@
+In the recent decade the amount of data has exploded with the increased usage of
+electronic devices resulting in new problems arising due to this technological
+development.
+These problems occur within, but not limited to, image classification, natural
+language processing and many more. 
+Given that the value of data is limited to how well we can find patterns in it
+and the sheer complexity and size of this data, classical statistical methods
+are no longer sufficient, calling for the need of other methods. 
+For such problems and data, \emph{machine learning} approaches have been used as
+a substitute to the aforementioned classical statistical methods. 
+Such approaches use a combination of mathematics and computational power to
+search for patterns in the data. 
+The main advantage of machine learning approaches is their ability to ''learn''
+iteratively through data examples without explicit rules.
+A popular class of machine learning models is artificial neural networks (also
+known as deep learning models) which attempt to replicate the biological neural
+system where information flows through layers of neurons. 
+This approach has seen great success in multiple applications such as
+self-driving vehicles and board games, for example when the AI application
+AlphaGo beat the world champion Go player, Lee Sedol, using a deep learning
+approach. 
+The term artificial neural network dates all the way back to W. McCulloh \&
+W.Pitts in 1943, where they modeled a one layer neural network using electrical
+circuits. F. Rosenblatt (1958) expanded this thought and invented the perceptron
+algorithm, which allowed such models to learn through data. 
+The model created a lot of excitement in the artificial intelligence community
+that only lasted a decade when M. Minsky and S. Papert (1969) showed that the
+perceptron model only applied to problems that were linearly separable; in
+particular, the XOR problem couldn't be solved using the perceptron model. 
+The enthusiasm faded and it wasn't until 1986 when D. Rumelhart et al. presented
+the \emph{backpropagation} algorithm that neural networks again became popular. 
+The backpropagation algorithm was very similar to the perceptron algorithm, but
+applied to a neural network of \emph{arbitrary depth}, meaning they could now
+solve non-linear problems. 
+The backpropagation algorithm is based on the concept of letting errors flow
+backwards into the network, which are then used to adjust learning parameters. 
+This process is repeated continuously, also called training, until a sufficient
+model is obtained. 
+As such, neural networks can be called slow learners, requiring potentially
+thousands or millions of iterations. 
+Thus the need for faster hardware that can perform training is essential in the
+success of neural network applications and training is therefore usually
+performed on General-Purpose Graphics Processing Units (GPGPU), which can
+leverage the highly parallel nature of neural networks. \newline 
+
+This thesis explores how an implementation of a deep learning library can be
+achieved in the data-parallel GPGPU language,
+Futhark\footnote{\url{https://futhark-lang.org}}, which was developed at the
+Department of Computer Science at the University of Copenhagen. 
+
+
+
+
+\section{Thesis objective}
+The main objective of this thesis is to investigate to what extend a
+general-purpose data-parallel language such as Futhark, can implement a deep
+learning library. 
+As Futhark imposes limitations on the language semantics in order to produce
+high-performance data-parallel GPU code, porting existing libraries one-to-one
+is not possible. Instead, alternative approaches are required. 
+The complex nature of a deep learning library will also require  an
+implementation of many separate components which will show if Futhark is capable
+of providing the necessary level of abstraction.  Such a library should ideally
+be flexible enough to be maintained over an extended period of time. 
+Lastly, will this thesis explore how well such a library in Futhark can compete,
+in terms of performance, with dedicated DSL solutions, such as
+Tensorflow\footnote{\url{https://tensorflow.org}}. \newline 
+
+\subsection{Limitations}
+The implementation is limited to the most essential blocks required for building
+and training a \emph{feed-forward} type of neural network. 
+Achieving the same flexibility as state of the art libraries, like Tensorflow is
+not a goal in this thesis work. 
+Furthermore, Tensorflow, and other popular deep learning libraries, are merely a
+front-end for the cudNN API\cite{nvidia} - an API provided by NVIDIA
+specifically designed for deep learning applications. 
+To achieve the best performance, the API provides multiple algorithm options and
+hardware specific optimizations depending on the system and neural network. 
+This will be difficult for the thesis' implementation and Futhark to match. 
+However, Tensorflow will be used as a benchmark to compare the performance of
+this thesis' library to one of the fastest libraries available.
+
+\section{Thesis structure}
+{Chapter} \ref{NN} presents the mathematical foundation behind neural networks
+based on chapter 5 in C. Bishop's book ''Pattern Recognition and Machine
+Learning''(2006) and present the components needed to build and train a neural
+network. 
+The chapter will also show the derivation of the backpropagation algorithm for a
+multilayer perceptron, while only the final results will be shown for a
+convolutional network.
+The reader is not expected to understand this chapter in detail, but should at
+least read through the main concepts and results. 
+{Chapter} \ref{chap:design} will first discuss implementation alternatives of a
+deep learning library in Futhark, and discuss why some approaches, which would
+be applicable in other languages, doesn't apply to Futhark. 
+The main concept behind the implementation will then be presented, followed by
+the implementation details. 
+{Chapter} \ref{benchmark} will compare the performance of training simple neural
+networks with the library against equivalent networks in Tensorflow. 
+{Chapter} \ref{conclusion} presents the future work of the library and provides
+a conclusion. 
+
+
+\section{Introduction to Futhark}
+Futhark is a small high-level, purely functional array language from the
+ML-family, which is designed to generate efficient data-parallel code
+\cite{Henriksen:2017:FPF:3140587.3062354}. 
+Futhark currently generates GPU code via OpenCL, although the language is
+hardware independent. 
+The Futhark compiler can compile directly to an executable for the GPU or it can
+generate a reusable library for either Python or C. 
+The latter is how the language is meant to be used, to accelerate
+computer-intensive parts of an application, and as such not meant as a
+general-purpose language. \newline 
+
+Futhark supports regular nested data-parallelism, as well as imperative-style
+in-place updates of arrays, but maintains its purely functional style through a
+uniqueness type system, which prohibit the use of an array after it has been
+updated in-place. 
+As most languages from the ML-family, Futhark also has parametric polymorphic
+and uses type parameters, which allows functions and types  to be polymorphic. 
+Type parameters are written as a name preceded by an apostrophe. 
+For example Listing \ref{numtype} shows a type abbreviation $number$ with a type
+parameter $t$, which is instantiated with concrete types in line 2, where $f32$
+denotes 32-bit floating point.
+\begin{lstlisting}[label = {numtype}, caption = {Example of type abbreviation
+with type parameter in Futhark}]
+type number 't = t
+type float = number f32
+\end{lstlisting}
+Type abbreviations are mostly for syntactic convenience and for abstract types
+that hide their definition we need to use the higher-order module system
+\cite{ICFP18}. 
+Futhark allows for abstract modules, called module types, which provide a
+powerful abstraction mechanism. 
+For example Listing \ref{nummodule} shows how we can write a module type,
+$number$ to have an abstract type $t$ and an abstract \texttt{add} function. 
+\begin{lstlisting}[label = {nummodule}, caption = {Example of a module type,
+$number$, in Futhark}]
+module type number = {
+type t 
+val add: t $\to$ t $\to$ t 
+}
+\end{lstlisting} 
+Module types are used to classify the contents of modules, meaning that an
+implementation of $number$ must provide a concrete type $t$ and an \texttt{add}
+function with the signature $t \to  t \to t$. 
+We can then define a \emph{float} module as follows:
+\begin{lstlisting}
+module float : number {
+type t = f32
+let add (x:t) (y:t) : t =  x + y
+}
+\end{lstlisting}
+One can specify that an abstract type is allowed to be functional by specifying
+it in the module type using \  $\widehat{ }$ , (e.g. \texttt{type \ $\widehat{
+	}$ my\_func}). 
+Lastly is it also possible to specify a parametric module, meaning that the
+module can take another module as an argument, (i.e. module-level functions),
+which allows for abstraction over modules. 
+The module system is an important factor in Futhark for providing abstraction
+and code reuse into larger applications, which are structured using the module
+system.\newline \newline 
+Futhark achieves much of its data-parallelism through its Second-Order Array
+Combinators (SOACs), \texttt{map reduce scan} and \texttt{scatter}. 
+The semantics of the first three are similar to the ones found in other
+functional languages, such as SML, F\# and Haskell, but there are, however, some
+aspects to note about these functions in Futhark. 
+The operator given to \texttt{reduce} and \texttt{scan} must be associative, in
+order to produce a result, that is equivalent to applying the operator in
+sequential order. 
+Along with, it must be the neutral element of the operator (e.g., 1 for
+multiplication and 0 for addition). 
+The \texttt{scatter} function takes three array arguments, \emph{x}, \emph{idx}
+and \emph{vals}, where \emph{idx} and \emph{vals} must be of same length. 
+The function performs in-place updates in \emph{x} on indices \emph{idx} with
+values \emph{vals} and returns the updated array. 
+The input array \emph{x} is \emph{consumed} and is not allowed to be used
+afterwards nor through aliasing. 
+These SOACs permits the Futhark compiler to generate parallel code, which means
+that Futhark programs are commonly written as bulk operations on arrays. 
+Through the SOACs is the Futhark compiler able to provide aggressive
+optimizations. 
+For example is a composition of nested \texttt{map-reduce} computation
+efficiently supported based on fusion and code generation
+\cite{Henriksen:2016:DGP:2935323.2935326, Larsen:2017:SRS:3122948.3122952} and
+the compiler also provide support for 1-d and 2-d tiling
+\cite{Henriksen:2017:FPF:3140587.3062354}.  
+
+As Futhark focuses less on expressiveness and elaborate type systems, but more
+on compiling to high-performance parallel code, it puts some constraints on the
+language semantics and in turn on the design of the deep learning library. 
+For example, the language does not support irregular arrays, meaning that all
+inner arrays must have the same shape. 
+For example, is this two dimensional array $\boldsymbol{\lbrack \lbrack
+	1\rbrack, \lbrack 2,3\rbrack \rbrack}$ not allowed. 
+Another key limitation is that arrays of functions are not permitted. How these
+limitations affect the design of the library will be discussed in Chapter
+\ref{chap:design}. 
+
+\section{Code and data}
+The library produced from this thesis can be found at
+\url{https://github.com/HnimNart/deep_learning}, which includes benchmark
+programs and tests. 
+The data used throughout the example programs is the MNIST
+dataset\footnote{\url{http://yann.lecun.com/exdb/mnist/}}, containing images of
+handwritten digits, which is often used as the "Hello-World" example in deep
+learning. 
+As these files are too big for GitHub, the data used for the Futhark examples
+can be found at \url{http://napoleon.hiperfit.dk/~HnimNart/mnist_data/}. 
+
+

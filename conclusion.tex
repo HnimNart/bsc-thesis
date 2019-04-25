@@ -1,0 +1,44 @@
+\label{conclusion}
+\section{Future work}
+There are some unsolved issues and shortcomings as described earlier in the
+implementation. 
+A discussion on how these should be resolved in a proper manner should be
+prioritized. 
+Having resolved those we can consider the future of the library which will
+consist of two main parts. 
+First of, implementation of better performing algorithms for the convolutional
+layer will inevitably increase performance \cite{Performance}. 
+This might also apply to implementing a matrix multiplication algorithm, with a
+better asymptotic bound, but might not be easy to properly to do in Futhark
+efficiently. Nevertheless improving these two main compute-intensive parts would
+improve the performance of the library. 
+Secondly is to extend the library with more activation functions, loss
+functions, optimizers and layers etc., giving a more complete library providing
+users with options. 
+
+\section{Conclusion} 
+This thesis explored implementation options of a deep learning library in
+Futhark. 
+The final implementation is based on a composition of functions for representing
+a neural network, which avoids the non-regular array and array of functions
+limitation of Futhark. 
+The representation also avoids the need for auxiliary information.  
+The implementation also showed that the module system in Futhark is capable of
+providing the abstraction needed for the complex nature of a deep learning
+library.
+While there are still some minor issues in the library, the proposed framework
+showed that Futhark is fully capable of an implementation of a deep learning
+library, which shows a high degree of flexibility and maintainability for future
+work.  \newline \newline 
+The benchmarks showed that for a MLP and larger batch sizes, Futhark is more
+than capable of competing with dedicated DSL solutions like Tensorflow, but
+Futhark falls behind when the batch size decreases. 
+For the convolutional network there is still some work to do, if the library is
+to be able to match Tensorflow's performance. 
+The main reason for the performance gap is due to Tensorflow's superior
+selection of algorithms. 
+When those algorithms are implemented into the library, a new benchmark will
+provide a more fair comparison of the  libraries. 
+As this thesis has only scraped the surface of a deep learning library in
+Futhark, future iterations will undoubtedly progress the library into being
+faster and more complete.

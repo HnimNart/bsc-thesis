@@ -1,0 +1,33 @@
+% KU-forside
+\usepackage[babel, en, titelside]{config/ku-forside}
+\usepackage{minted}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[hidelinks]{hyperref}
+\usepackage{diagbox}
+\usepackage{algorithm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{makecell}
+\usepackage[noend]{algpseudocode}
+\usepackage[final]{listings}
+
+% Avoid breaking lstlistings environments across pages.
+\BeforeBeginEnvironment{lstlisting}{\vspace{\topskip}\par\noindent\begin{minipage}{\linewidth}}
+	\AfterEndEnvironment{lstlisting}{\end{minipage}\par}
+\newenvironment{wrap}{\vspace{\topskip}\par\noindent\begin{minipage}{\linewidth}}{\end{minipage}\par}
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+\interfootnotelinepenalty=10000
+\setcounter{tocdepth}{1}
+\input{futhark.tex}
+
+\lstset{language={futhark},
+	numbers=left,
+	moredelim=**[is][\color{red}]{@}{@},
+	xleftmargin=0.5cm,
+	basicstyle=\small,
+	captionpos=b,
+	frame = single,
+	mathescape=true
+}
